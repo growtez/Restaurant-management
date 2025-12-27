@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
+import { AuthProvider } from "./context/AuthContext";
 
 // Import your pages
 import HomePage from "./pages/home";
@@ -25,32 +26,34 @@ import "./App.css";
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="App">
-          <Routes>
-            {/* Regular customer routes */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/menu" element={<MenuPage />} />
-            <Route path="/orders" element={<MyOrdersPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/likes" element={<LikesPage />} />
-            <Route path="/popular" element={<MostPopularPage />} />
-            <Route path="/recent" element={<RecentOrdersPage />} />
-            <Route path="/offers" element={<OffersPage />} />
-            <Route path="/onboarding" element={<OnboardingPage />} />
-            <Route path="/login" element={<LoginPage />} />
+    <AuthProvider>
+      <ThemeProvider>
+        <Router>
+          <div className="App">
+            <Routes>
+              {/* Regular customer routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/menu" element={<MenuPage />} />
+              <Route path="/orders" element={<MyOrdersPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/likes" element={<LikesPage />} />
+              <Route path="/popular" element={<MostPopularPage />} />
+              <Route path="/recent" element={<RecentOrdersPage />} />
+              <Route path="/offers" element={<OffersPage />} />
+              <Route path="/onboarding" element={<OnboardingPage />} />
+              <Route path="/login" element={<LoginPage />} />
 
-            {/* QR Ordering routes (dine-in) */}
-            <Route path="/r/:restaurantSlug" element={<QRMenuPage />} />
-            <Route path="/r/:restaurantSlug/table/:tableNumber" element={<QRMenuPage />} />
-            <Route path="/r/:restaurantSlug/cart" element={<QRCartPage />} />
-            <Route path="/r/:restaurantSlug/order-success" element={<QROrderSuccessPage />} />
-          </Routes>
-        </div>
-      </Router>
-    </ThemeProvider>
+              {/* QR Ordering routes (dine-in) */}
+              <Route path="/r/:restaurantSlug" element={<QRMenuPage />} />
+              <Route path="/r/:restaurantSlug/table/:tableNumber" element={<QRMenuPage />} />
+              <Route path="/r/:restaurantSlug/cart" element={<QRCartPage />} />
+              <Route path="/r/:restaurantSlug/order-success" element={<QROrderSuccessPage />} />
+            </Routes>
+          </div>
+        </Router>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
