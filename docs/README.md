@@ -166,6 +166,7 @@ const spacing = {
 | [Delivery App](./DELIVERY_APP.md) | Mobile app for drivers | Order delivery management |
 | [Restaurant Admin](./RESTAURANT_ADMIN.md) | Web admin panel | Restaurant management |
 | [Super Admin](./SUPER_ADMIN.md) | Platform admin | Multi-restaurant management |
+| **[Firebase Setup](./FIREBASE_SETUP.md)** | Backend setup | Firebase configuration & credentials |
 
 ---
 
@@ -297,8 +298,9 @@ npm run build
 - [x] Location services
 
 ### Phase 2: Backend Integration
-- [ ] Firebase Authentication
-- [ ] Firestore database setup
+- [x] Firebase Authentication (Email/Password + Google)
+- [x] Firestore database setup
+- [x] Firebase service layer for all apps
 - [ ] Real-time order updates
 - [ ] Push notifications
 
