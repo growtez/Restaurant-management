@@ -1,0 +1,35 @@
+.likes-container {
+  padding: 20px;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+.likes-container .header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.likes-container .back-btn {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 0;
+}
+
+.likes-container .header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  flex-grow: 1;
+  text-align: center;
+  margin-right: 24px; /* To balance the space of the back button */
+}
+
+.likes-content {
+  text-align: center;
+  margin-top: 50px;
+}

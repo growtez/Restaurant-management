@@ -1,0 +1,38 @@
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Home, ShoppingBag, MessageCircle, User, ArrowLeft } from 'lucide-react';
+import './likes.css';
+
+const LikesPage = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="likes-container">
+      <header className="header">
+        <button onClick={() => navigate(-1)} className="back-btn">
+          <ArrowLeft size={24} />
+        </button>
+        <h1>My Favourites</h1>
+      </header>
+      <div className="likes-content">
+        <p>Your favourite items will appear here.</p>
+      </div>
+      <nav className="bottom-nav">
+        <NavLink to="/" className="nav-btn">
+          <Home size={24} />
+        </NavLink>
+        <NavLink to="/menu" className="nav-btn">
+          <ShoppingBag size={24} />
+        </NavLink>
+        <NavLink to="/orders" className="nav-btn">
+          <MessageCircle size={24} />
+        </NavLink>
+        <NavLink to="/profile" className="nav-btn">
+          <User size={24} />
+        </NavLink>
+      </nav>
+    </div>
+  );
+};
+
+export default LikesPage;

@@ -1,0 +1,42 @@
+/* App.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f7f8fa;
+}
+
+.main-content {
+  margin-left: 240px; /* Same width as sidebar */
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
+/* Remove these if you want a full-width layout */
+.main-content-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+}

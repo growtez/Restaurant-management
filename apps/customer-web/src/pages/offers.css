@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Offers Page Styles */
+.offers-container {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Poppins', sans-serif;
+  padding-bottom: 40px;
+}
+
+/* Header Styles */
+.offers-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.offers-header .back-btn {
+  background: none;
+  border: none;
+  color: #d9b550;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 4px;
+}
+
+.offers-header h1 {
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Loyalty Card */
+.loyalty-card {
+  background: linear-gradient(135deg, #d9b550, #d4b202);
+  color: var(--color-background);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 0 24px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loyalty-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20px;
+  width: 100px;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(15deg);
+}
+
+.loyalty-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.loyalty-header div h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.loyalty-header div p {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.points-display {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.points-number {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.points-label {
+  font-size: 12px;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 6px;
+  background-color: rgba(33, 33, 33, 0.2);
+  border-radius: 3px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--color-background);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* Offers Section */
+.offers-section {
+  margin: 0 24px 40px 24px;
+}
+
+.offers-section h4 {
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.offers-list {
+  background-color: var(--color-card);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.offer-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-card-hover);
+}
+
+.offer-card:last-child {
+  border-bottom: none;
+}
+
+.offer-info h5 {
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.offer-info p {
+  color: #d9b550;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.expire-date {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.use-offer-btn {
+  background-color: #d9b550;
+  color: var(--color-background);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.use-offer-btn:hover {
+  background-color: #d4b202;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .offers-header {
+    padding: 16px 20px;
+  }
+
+  .loyalty-card {
+    margin: 0 20px 24px;
+  }
+
+  .offers-section {
+    margin: 0 20px 40px 20px;
+  }
+}

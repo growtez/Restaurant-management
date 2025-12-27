@@ -1,0 +1,35 @@
+.popular-container {
+  padding: 20px;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+.popular-container .header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.popular-container .back-btn {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 0;
+}
+
+.popular-container .header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  flex-grow: 1;
+  text-align: center;
+  margin-right: 24px; /* To balance the space of the back button */
+}
+
+.popular-content {
+  text-align: center;
+  margin-top: 50px;
+}
