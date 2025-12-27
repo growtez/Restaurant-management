@@ -1,5 +1,9 @@
 # Restaurant SaaS - Complete Application Documentation
 
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Restaurant--Management-blue?logo=github)](https://github.com/growtez/Restaurant-management)
+
+**🔗 Repository:** [https://github.com/growtez/Restaurant-management](https://github.com/growtez/Restaurant-management)
+
 ## 📚 Table of Contents
 
 1. [Project Overview](#project-overview)
