@@ -99,7 +99,6 @@ Restaurant-management/
 
 ### Super Admin
 - 🏪 Multi-restaurant management
-- 🚗 Driver verification
 - 👤 Customer management
 - 💵 Commission settings
 - 📈 Platform analytics
