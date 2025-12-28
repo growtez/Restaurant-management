@@ -11,9 +11,17 @@ import type { User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
+interface UserProfile {
+    id: string;
+    email: string;
+    name: string;
+    role: 'restaurant_admin' | 'super_admin' | 'customer' | 'driver';
+    restaurantId?: string;
+}
+
 interface AuthContextType {
     user: User | null;
-    userProfile: any | null;
+    userProfile: UserProfile | null;
     loading: boolean;
     signIn: (email: string, password: string) => Promise<User>;
     signOut: () => Promise<void>;
@@ -30,7 +38,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
-    const [userProfile, setUserProfile] = useState<any | null>(null);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -45,7 +53,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     // Fetch user profile from Firestore
                     const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
                     if (userDoc.exists()) {
-                        const profile = { id: userDoc.id, ...userDoc.data() };
+                        const data = userDoc.data() as Omit<UserProfile, 'id'>;
+                        const profile: UserProfile = { id: userDoc.id, ...data };
                         setUserProfile(profile);
 
                         // Verify user is a restaurant admin
@@ -73,7 +82,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // Verify user role
         const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
         if (userDoc.exists()) {
-            const profile = userDoc.data();
+            const profile = userDoc.data() as UserProfile;
             if (profile.role !== 'restaurant_admin' && profile.role !== 'super_admin') {
                 // Sign out if not authorized
                 await firebaseSignOut(auth);
