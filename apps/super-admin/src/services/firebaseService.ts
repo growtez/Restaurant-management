@@ -24,8 +24,7 @@ import {
     startAfter,
     getCountFromServer,
     serverTimestamp,
-    QueryDocumentSnapshot,
-    DocumentSnapshot
+    QueryDocumentSnapshot
 } from 'firebase/firestore';
 
 // Import Types

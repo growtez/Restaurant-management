@@ -8,6 +8,7 @@ import RestaurantDetails from './pages/RestaurantDetails';
 import Subscriptions from './pages/Subscriptions';
 import Settings from './pages/Settings';
 import LoginPage from './pages/Login';
+import Signup from './pages/Signup';
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -39,6 +40,7 @@ function AppRoutes() {
     return (
         <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<Signup />} /> {/* Added Signup route */}
             <Route path="/" element={
                 <ProtectedRoute><Layout /></ProtectedRoute>
             }>
