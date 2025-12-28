@@ -28,12 +28,15 @@ const firebaseConfig = {
 
 ### App-Specific App IDs
 
-| Application | App ID |
-|-------------|--------|
-| **customer-web** | `1:802832672428:web:c85df57f4ca39ecef26109` |
-| **restaurant-admin** | `1:802832672428:web:50767ad0e425af31f26109` |
-| **super-admin** | `1:802832672428:web:592ea2967e2bea6bf26109` |
-| **delivery-app** | `1:802832672428:web:9760ba4756f982e7f26109` |
+| Application | Platform | App ID / Package Name |
+|-------------|----------|----------------------|
+| **customer-web** | Web | `1:802832672428:web:c85df57f4ca39ecef26109` |
+| **customer-app** | Web ID | `1:802832672428:web:04060fd62302de56f26109` |
+| **customer-app-android** | Android | `com.customerapp` |
+| **restaurant-admin** | Web | `1:802832672428:web:50767ad0e425af31f26109` |
+| **super-admin** | Web | `1:802832672428:web:592ea2967e2bea6bf26109` |
+| **delivery-app** | Web | `1:802832672428:web:9760ba4756f982e7f26109` |
+| **delivery-app-android** | Android | `com.deliveryapp` |
 
 ---
 
@@ -46,6 +49,50 @@ const firebaseConfig = {
 | **Storage** | ⚠️ Requires Upgrade | Needs Blaze plan (pay-as-you-go) |
 
 ---
+
+## 🔐 Test Credentials
+
+> ⚠️ **Important:** These accounts must be created in Firebase Authentication before use.
+> Go to Firebase Console → Authentication → Users → Add user
+
+### Super Admin
+| Field | Value |
+|-------|-------|
+| **Email** | `admin@growtez.com` |
+| **Password** | `Admin@123` |
+| **Role** | `super_admin` |
+| **Access** | Full platform access, manage all restaurants |
+
+### Restaurant Admin (Demo)
+| Field | Value |
+|-------|-------|
+| **Email** | `demo@pizzahut.com` |
+| **Password** | `Restaurant@123` |
+| **Role** | `restaurant_admin` |
+| **Access** | Single restaurant management |
+
+### Setting Up Admin Accounts
+
+1. **Create user in Firebase Authentication:**
+   - Go to [Firebase Console](https://console.firebase.google.com/project/restaurant-management-growtez/authentication/users)
+   - Click "Add user"
+   - Enter email and password
+
+2. **Add user profile in Firestore:**
+   ```
+   Collection: users
+   Document ID: {user_uid}
+   Fields:
+     - email: "admin@growtez.com"
+     - name: "Super Admin"
+     - role: "super_admin"  // or "restaurant_admin"
+     - createdAt: timestamp
+   ```
+
+3. **Test the login:**
+   - Super Admin: http://localhost:3000/login
+   - Restaurant Admin: http://localhost:3001/login
+
 
 ## 🚀 Quick Setup for Each App
 

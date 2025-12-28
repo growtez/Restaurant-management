@@ -159,9 +159,28 @@ npx react-native run-android
 cd apps/restaurant-admin
 npm install
 npm run dev
+# Opens at http://localhost:3001
+```
+
+#### Super Admin
+```bash
+cd apps/super-admin
+npm install
+npm run dev
+# Opens at http://localhost:3000
 ```
 
 ---
+
+
+### Admin Logins
+
+| App | Email | Password | URL |
+|-----|-------|----------|-----|
+| **Super Admin** | `admin@growtez.com` | `Admin@123` | http://localhost:3000/login |
+| **Restaurant Admin** | `demo@pizzahut.com` | `Restaurant@123` | http://localhost:3001/login |
+
+
 
 ## 🎨 Design System
 
@@ -231,9 +250,10 @@ Detailed documentation is available in the `/docs` folder:
 - [x] Dark/Light theme system
 - [x] Location services
 
-### 🔄 Phase 2: Backend Integration (In Progress)
-- [ ] Firebase Authentication
-- [ ] Firestore database setup
+### ✅ Phase 2: Backend Integration (Completed)
+- [x] Firebase Authentication (Email/Password + Google Sign-In)
+- [x] Firestore database setup
+- [x] Admin login systems (Restaurant Admin & Super Admin)
 - [ ] Real-time order updates
 - [ ] Push notifications
 

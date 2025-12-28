@@ -1,33 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import {  Mail, Lock, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
-import { NavLink } from "react-router-dom";
+import { Mail, Lock, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from '../context/AuthContext';
 import './login.css';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { signIn, signInWithGoogle, signUp, isAuthenticated } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showEmailSuggestion, setShowEmailSuggestion] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [name, setName] = useState('');
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
-  const validateGmail = (email) => {
-    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-    return gmailRegex.test(email);
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
   };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
     setEmailError('');
-    
-    // Show suggestion for gmail completion
+
     if (value && !value.includes('@') && value.length > 2) {
       setShowEmailSuggestion(true);
     } else {
@@ -49,14 +62,14 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!email.trim()) {
-      setEmailError('Please enter your Gmail address');
+      setEmailError('Please enter your email address');
       return;
     }
 
-    if (!validateGmail(email)) {
-      setEmailError('Please enter a valid Gmail address');
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address');
       return;
     }
 
@@ -65,32 +78,57 @@ const LoginPage = () => {
       return;
     }
 
+    if (isSignUp && password.length < 6) {
+      setPasswordError('Password must be at least 6 characters');
+      return;
+    }
+
     setIsLoading(true);
     setEmailError('');
     setPasswordError('');
 
-    // Simulate login process
     try {
-      // Here you would typically make an API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Store user email (you might want to use proper state management)
-      localStorage.setItem('userEmail', email);
-      
-      // Redirect to home page or dashboard
-      // You can replace this with your routing logic
-      window.location.href = '/';
-      
+      if (isSignUp) {
+        await signUp(email, password, name || email.split('@')[0]);
+      } else {
+        await signIn(email, password);
+      }
+      navigate('/');
     } catch (error) {
-      setEmailError('Something went wrong. Please try again.');
+      console.error('Auth error:', error);
+      if (error.code === 'auth/user-not-found') {
+        setEmailError('No account found with this email');
+      } else if (error.code === 'auth/wrong-password') {
+        setPasswordError('Incorrect password');
+      } else if (error.code === 'auth/email-already-in-use') {
+        setEmailError('An account already exists with this email');
+      } else if (error.code === 'auth/invalid-credential') {
+        setEmailError('Invalid email or password');
+      } else {
+        setEmailError(error.message || 'Something went wrong. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleSignIn = () => {
-    // Implement Google Sign-In logic here
-    console.log('Google Sign-In clicked');
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    setEmailError('');
+
+    try {
+      await signInWithGoogle();
+      navigate('/');
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        // User closed the popup, no error needed
+      } else {
+        setEmailError('Google sign-in failed. Please try again.');
+      }
+    } finally {
+      setIsGoogleLoading(false);
+    }
   };
 
   return (
@@ -100,7 +138,7 @@ const LoginPage = () => {
         <NavLink to="/profile" className="back-button">
           <ArrowLeft size={24} />
         </NavLink>
-        
+
       </header>
 
       {/* Main Content */}
@@ -163,8 +201,8 @@ const LoginPage = () => {
               {passwordError && <span className="error-message">{passwordError}</span>}
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={`login-button ${isLoading ? 'loading' : ''}`}
               disabled={isLoading}
             >
@@ -183,17 +221,23 @@ const LoginPage = () => {
             <span>or</span>
           </div>
 
-          <button 
-            type="button" 
-            className="google-signin-button"
+          <button
+            type="button"
+            className={`google-signin-button ${isGoogleLoading ? 'loading' : ''}`}
             onClick={handleGoogleSignIn}
+            disabled={isGoogleLoading || isLoading}
           >
-            {/* <img src="https://www.svgrepo.com/show/61540/google.svg" alt="Google Logo" /> */}
-            <img 
-              src="/assets/google_logo.svg" 
-              alt="Google Logo" 
-            />
-            Sign in with Google
+            {isGoogleLoading ? (
+              <div className="loading-spinner"></div>
+            ) : (
+              <>
+                <img
+                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                  alt="Google Logo"
+                />
+                Sign in with Google
+              </>
+            )}
           </button>
 
           <div className="login-footer">
@@ -202,7 +246,7 @@ const LoginPage = () => {
               <a href="/profile" className="link">Terms of Service</a> and{' '}
               <a href="/profile" className="link">Privacy Policy</a>
             </p>
-        
+
           </div>
         </div>
       </main>

@@ -19,26 +19,44 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [userProfile, setUserProfile] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [authError, setAuthError] = useState(null);
 
     // Listen for auth state changes
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            setUser(firebaseUser);
+        console.log('🔐 Setting up Firebase Auth listener...');
 
-            if (firebaseUser) {
-                // Fetch user profile from Firestore
-                const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-                if (userDoc.exists()) {
-                    setUserProfile({ id: userDoc.id, ...userDoc.data() });
+        try {
+            const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+                console.log('🔐 Auth state changed:', firebaseUser ? 'User logged in' : 'No user');
+                setUser(firebaseUser);
+
+                if (firebaseUser) {
+                    try {
+                        // Fetch user profile from Firestore
+                        const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+                        if (userDoc.exists()) {
+                            setUserProfile({ id: userDoc.id, ...userDoc.data() });
+                        }
+                    } catch (profileError) {
+                        console.warn('⚠️ Could not fetch user profile:', profileError.message);
+                    }
+                } else {
+                    setUserProfile(null);
                 }
-            } else {
-                setUserProfile(null);
-            }
 
+                setLoading(false);
+            }, (error) => {
+                console.error('❌ Auth state error:', error);
+                setAuthError(error.message);
+                setLoading(false);
+            });
+
+            return () => unsubscribe();
+        } catch (error) {
+            console.error('❌ Failed to setup auth listener:', error);
+            setAuthError(error.message);
             setLoading(false);
-        });
-
-        return () => unsubscribe();
+        }
     }, []);
 
     // Sign up with email and password

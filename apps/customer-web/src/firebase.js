@@ -14,20 +14,37 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+console.log('🔥 Firebase Config:', {
+    apiKey: firebaseConfig.apiKey ? '✓ Set' : '✗ Missing',
+    authDomain: firebaseConfig.authDomain || '✗ Missing',
+    projectId: firebaseConfig.projectId || '✗ Missing',
+});
 
-// Initialize services
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
+// Initialize Firebase
+let app, db, auth, storage;
+
+try {
+    app = initializeApp(firebaseConfig);
+    console.log('✅ Firebase app initialized');
+
+    // Initialize services
+    db = getFirestore(app);
+    auth = getAuth(app);
+    storage = getStorage(app);
+    console.log('✅ Firebase services ready (Firestore, Auth, Storage)');
+
+} catch (error) {
+    console.error('❌ Firebase initialization failed:', error);
+}
 
 // Connect to emulators in development
-if (import.meta.env.VITE_USE_EMULATORS === 'true') {
+if (import.meta.env.VITE_USE_EMULATORS === 'true' && db && auth && storage) {
     connectFirestoreEmulator(db, 'localhost', 8080);
     connectAuthEmulator(auth, 'http://localhost:9099');
     connectStorageEmulator(storage, 'localhost', 9199);
     console.log('🔧 Using Firebase Emulators');
 }
 
+export { db, auth, storage };
 export default app;
+

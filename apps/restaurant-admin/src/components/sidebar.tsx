@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 
-import pizzaLogo from "../assets/pizza.jpg"; // make sure spelling is 'assets' not 'assests'
+// Using URL instead of local asset to avoid missing file error
+const pizzaLogo = "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=100&h=100&fit=crop";
 
 
 interface NavItem {
@@ -16,7 +17,7 @@ interface NavItem {
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Set active tab based on current path
   const getActiveTab = () => {
     const path = location.pathname;
@@ -45,13 +46,13 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className="sidebar">
-      
+
       <div className="profile">
-      <div className="profile-avatar">
-        <img src={pizzaLogo} alt="log" className="avatar-img" />
+        <div className="profile-avatar">
+          <img src={pizzaLogo} alt="log" className="avatar-img" />
+        </div>
+        <div className="profile-name">Pizza Hut</div>
       </div>
-      <div className="profile-name">Pizza Hut</div>
-    </div>
 
       <nav className="nav">
         {navItems.map((item) => (
