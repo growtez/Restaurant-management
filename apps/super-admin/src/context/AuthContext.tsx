@@ -51,6 +51,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             if (firebaseUser) {
                 try {
+                    await firebaseUser.getIdToken(true);
+
+                    if (import.meta.env.DEV) {
+                        console.log('🔥 Firebase projectId (auth):', auth.app.options.projectId);
+                        console.log('🔥 Firebase projectId (firestore):', db.app.options.projectId);
+                    }
                     // Fetch user profile from Firestore
                     const userDocRef = doc(db, 'users', firebaseUser.uid);
                     const userDoc = await getDoc(userDocRef);
@@ -73,6 +79,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     }
                 } catch (error) {
                     console.warn('⚠️ Could not fetch user profile:', error);
+                    if (
+                        typeof error === 'object' &&
+                        error !== null &&
+                        'code' in error &&
+                        typeof (error as { code?: unknown }).code === 'string' &&
+                        [
+                            'auth/user-token-expired',
+                            'auth/invalid-user-token',
+                            'auth/user-disabled',
+                            'auth/network-request-failed',
+                            'auth/internal-error',
+                        ].includes((error as { code: string }).code)
+                    ) {
+                        try {
+                            await firebaseSignOut(auth);
+                        } catch {
+                            // ignore
+                        }
+                        setUser(null);
+                    }
                     setUserProfile(null);
                 }
             } else {
@@ -88,6 +114,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Sign in with email and password
     const signIn = async (email: string, password: string): Promise<User> => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+        await userCredential.user.getIdToken(true);
 
         // Verify role from DB
         const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
@@ -117,6 +145,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // Removed whitelist logic as requested
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+
+        await user.getIdToken(true);
 
         // Create profile
         const newProfile = {
