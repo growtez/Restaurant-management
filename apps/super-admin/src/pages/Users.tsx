@@ -103,17 +103,33 @@ export default function Users() {
                                                 {user.createdAt ? new Date(user.createdAt.seconds * 1000).toLocaleDateString() : 'N/A'}
                                             </td>
                                             <td>
-                                                <select
-                                                    className="form-input text-sm py-1"
-                                                    value={user.role}
-                                                    onChange={(e) => updateRole(user.uid, e.target.value)}
-                                                    style={{ width: 'auto' }}
-                                                >
-                                                    <option value={UserRole.CUSTOMER}>Customer</option>
-                                                    <option value={UserRole.RESTAURANT_ADMIN}>Restaurant Admin</option>
-                                                    <option value={UserRole.DELIVERY_PERSONNEL}>Driver</option>
-                                                    <option value={UserRole.SUPER_ADMIN}>Super Admin</option>
-                                                </select>
+                                                <div className="flex items-center gap-2">
+                                                    <select
+                                                        className="form-input text-sm py-1"
+                                                        value={user.role}
+                                                        onChange={(e) => updateRole(user.uid, e.target.value)}
+                                                        style={{ width: 'auto' }}
+                                                    >
+                                                        <option value={UserRole.CUSTOMER}>Customer</option>
+                                                        <option value={UserRole.RESTAURANT_ADMIN}>Restaurant Admin</option>
+                                                        <option value={UserRole.DELIVERY_PERSONNEL}>Driver</option>
+                                                        <option value={UserRole.SUPER_ADMIN}>Super Admin</option>
+                                                    </select>
+                                                    <button
+                                                        className="btn btn-ghost btn-sm p-1"
+                                                        title="View Orders"
+                                                        onClick={() => alert('View Orders functionality coming soon')}
+                                                    >
+                                                        <Search size={16} />
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-ghost btn-sm p-1 text-red-600 hover:bg-red-50"
+                                                        title="Suspend User"
+                                                        onClick={() => alert('Suspend User functionality coming soon')}
+                                                    >
+                                                        <AlertCircle size={16} />
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))

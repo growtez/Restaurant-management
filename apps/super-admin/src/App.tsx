@@ -24,8 +24,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '100vh',
-                background: '#0f0c29',
-                color: '#fff'
+                background: 'var(--color-bg-primary)',
+                color: 'var(--color-text-primary)'
             }}>
                 Loading...
             </div>

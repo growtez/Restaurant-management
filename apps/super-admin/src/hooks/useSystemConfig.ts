@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import firebaseService from '../services/firebaseService';
-import { SaasSettings, SubscriptionPlan } from '@restaurant-saas/types';
+import { SaasSettings } from '@restaurant-saas/types';
 
 export function useSystemConfig() {
     const [config, setConfig] = useState<Partial<SaasSettings>>({});

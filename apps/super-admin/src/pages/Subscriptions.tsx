@@ -34,9 +34,14 @@ export default function Subscriptions() {
                         Manage subscription plans and payments
                     </p>
                 </div>
-                <button className="btn btn-ghost" onClick={refresh} title="Refresh">
-                    <RefreshCw size={18} />
-                </button>
+                <div className="flex gap-2">
+                    <button className="btn btn-ghost" onClick={refresh} title="Refresh">
+                        <RefreshCw size={18} />
+                    </button>
+                    <button className="btn btn-primary" onClick={() => alert('Edit Plans functionality coming soon')}>
+                        Edit Plans
+                    </button>
+                </div>
             </header>
 
             <div className="page-content animate-fadeIn">

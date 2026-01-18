@@ -1,13 +1,18 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Search,
     Plus,
     Filter,
     MoreHorizontal,
     ExternalLink,
-    RefreshCw
+    RefreshCw,
+    Edit,
+    Ban,
+    CheckCircle
 } from 'lucide-react';
 import { useRestaurants } from '../hooks/useRestaurants';
+import AddRestaurantModal from '../components/AddRestaurantModal';
 import { RestaurantStatus, SubscriptionPlan } from '@restaurant-saas/types';
 
 const getStatusBadge = (status: RestaurantStatus) => {
@@ -28,20 +33,23 @@ const getStatusBadge = (status: RestaurantStatus) => {
 const getPlanBadge = (plan: SubscriptionPlan) => {
     switch (plan) {
         case SubscriptionPlan.DELIVERY:
-            return <span className="badge" style={{ background: 'rgba(139, 92, 246, 0.15)', color: '#a78bfa' }}>Delivery</span>;
+            return <span className="badge info">Delivery</span>;
         case SubscriptionPlan.QR:
-            return <span className="badge" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa' }}>QR Only</span>;
+            return <span className="badge warning">QR Only</span>;
         case SubscriptionPlan.OWNED:
-            return <span className="badge" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>Owned</span>;
+            return <span className="badge success">Owned</span>;
         default:
             return <span className="badge">{plan}</span>;
     }
 };
 
 export default function Restaurants() {
+    const navigate = useNavigate();
     const { restaurants, loading, error, actions } = useRestaurants();
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
     const filteredRestaurants = restaurants.filter(r => {
         const matchesSearch = r.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -59,8 +67,13 @@ export default function Restaurants() {
         );
     }
 
+    const handleAction = (action: () => void) => {
+        action();
+        setOpenMenuId(null);
+    };
+
     return (
-        <>
+        <div onClick={() => setOpenMenuId(null)}>
             <header className="page-header flex items-center justify-between">
                 <div>
                     <h1 style={{ fontSize: '1.5rem', fontWeight: 600 }}>Restaurants</h1>
@@ -72,7 +85,7 @@ export default function Restaurants() {
                     <button className="btn btn-ghost" onClick={actions.refresh} title="Refresh">
                         <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
                     </button>
-                    <button className="btn btn-primary">
+                    <button className="btn btn-primary" onClick={() => setIsAddModalOpen(true)}>
                         <Plus size={18} />
                         Add Restaurant
                     </button>
@@ -123,8 +136,8 @@ export default function Restaurants() {
                 </div>
 
                 {/* Restaurants Table */}
-                <div className="card">
-                    <div className="table-container">
+                <div className="card" style={{ overflow: 'visible' }}>
+                    <div className="table-container" style={{ overflow: 'visible' }}>
                         {loading ? (
                             <div className="p-8 text-center text-secondary">Loading restaurants...</div>
                         ) : filteredRestaurants.length === 0 ? (
@@ -162,7 +175,7 @@ export default function Restaurants() {
                                                 {restaurant.createdAt?.seconds ? new Date(restaurant.createdAt.seconds * 1000).toLocaleDateString() : 'N/A'}
                                             </td>
                                             <td>
-                                                <div className="flex items-center gap-sm">
+                                                <div className="flex items-center gap-sm relative">
                                                     <a
                                                         href={`https://${restaurant.domain || restaurant.slug + '.yourapp.com'}`}
                                                         target="_blank"
@@ -172,9 +185,42 @@ export default function Restaurants() {
                                                     >
                                                         <ExternalLink size={16} />
                                                     </a>
-                                                    <button className="btn btn-ghost">
+                                                    <button
+                                                        className="btn btn-ghost"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setOpenMenuId(openMenuId === restaurant.id ? null : restaurant.id);
+                                                        }}
+                                                    >
                                                         <MoreHorizontal size={18} />
                                                     </button>
+
+                                                    {openMenuId === restaurant.id && (
+                                                        <div className="absolute right-0 top-full mt-1 bg-white border border-border rounded-lg shadow-lg py-1 z-10 w-48 text-sm animate-in fade-in zoom-in-95 duration-200">
+                                                            <button
+                                                                className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2"
+                                                                onClick={() => handleAction(() => navigate(`/restaurants/${restaurant.id}`))}
+                                                            >
+                                                                <Edit size={14} /> Edit Details
+                                                            </button>
+
+                                                            {restaurant.status === RestaurantStatus.SUSPENDED ? (
+                                                                <button
+                                                                    className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-green-600"
+                                                                    onClick={() => handleAction(() => actions.reactivate(restaurant.id))}
+                                                                >
+                                                                    <CheckCircle size={14} /> Reactivate
+                                                                </button>
+                                                            ) : (
+                                                                <button
+                                                                    className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-red-600"
+                                                                    onClick={() => handleAction(() => actions.suspend(restaurant.id, 'Super Admin Action'))}
+                                                                >
+                                                                    <Ban size={14} /> Suspend
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>
@@ -185,6 +231,17 @@ export default function Restaurants() {
                     </div>
                 </div>
             </div>
-        </>
+
+            {isAddModalOpen && (
+                <AddRestaurantModal
+                    onClose={() => setIsAddModalOpen(false)}
+                    onSuccess={() => {
+                        actions.refresh();
+                        // Modal closes automatically via props usually
+                    }}
+                />
+            )}
+        </div>
     );
 }
+
